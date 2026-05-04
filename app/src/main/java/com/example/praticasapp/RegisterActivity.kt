@@ -1,8 +1,7 @@
 package com.example.praticasapp
 
+
 import android.app.Activity
-import android.content.Intent
-import android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -29,19 +28,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.praticasapp.ui.theme.PraticasAPPTheme
 
-class LoginActivity : ComponentActivity() {
+class RegisterActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             PraticasAPPTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    LoginPage(
+                    RegisterPage(
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -49,23 +47,38 @@ class LoginActivity : ComponentActivity() {
         }
     }
 }
-@Preview(showBackground = true)
+
 @Composable
-fun LoginPage(modifier: Modifier = Modifier) {
+fun RegisterPage(modifier: Modifier = Modifier) {
+    var name by rememberSaveable { mutableStateOf("") }
     var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
+    var repeatPassword by rememberSaveable { mutableStateOf("") }
 
-    val activity = LocalContext.current as Activity
+    val context = LocalContext.current
+    val activity = context as? Activity
+
     val fieldModifier = Modifier.fillMaxWidth(0.9f)
 
     Column(
-        modifier
+        modifier = modifier
             .padding(24.dp)
-            .fillMaxSize(), Arrangement.Center, Alignment.CenterHorizontally
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Bem-vindo!",
+            text = "Criar conta",
             fontSize = 24.sp
+        )
+
+        Spacer(modifier = Modifier.size(12.dp))
+
+        OutlinedTextField(
+            value = name,
+            label = { Text("Digite seu nome") },
+            modifier = fieldModifier,
+            onValueChange = { name = it }
         )
 
         Spacer(modifier = Modifier.size(12.dp))
@@ -89,43 +102,49 @@ fun LoginPage(modifier: Modifier = Modifier) {
 
         Spacer(modifier = Modifier.size(12.dp))
 
+        OutlinedTextField(
+            value = repeatPassword,
+            label = { Text("Repita sua senha") },
+            modifier = fieldModifier,
+            onValueChange = { repeatPassword = it },
+            visualTransformation = PasswordVisualTransformation()
+        )
+
+        Spacer(modifier = Modifier.size(16.dp))
+
         Row(
-            fieldModifier, Arrangement.SpaceEvenly
+            modifier = fieldModifier,
+            horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             Button(
                 onClick = {
-                    Toast.makeText(activity, "Login OK!", Toast.LENGTH_LONG).show()
-                    activity.startActivity(
-                        Intent(activity, MainActivity::class.java).setFlags(
-                            FLAG_ACTIVITY_SINGLE_TOP
-                        )
-                    )
+                    Toast.makeText(
+                        context,
+                        "Registro OK!",
+                        Toast.LENGTH_LONG
+                    ).show()
+
+                    activity?.finish()
                 },
-                enabled = email.isNotEmpty() && password.isNotEmpty()
+                enabled = name.isNotEmpty() &&
+                        email.isNotEmpty() &&
+                        password.isNotEmpty() &&
+                        repeatPassword.isNotEmpty() &&
+                        password == repeatPassword
             ) {
-                Text("Login")
+                Text("Registrar")
             }
 
             Button(
                 onClick = {
+                    name = ""
                     email = ""
                     password = ""
+                    repeatPassword = ""
                 }
             ) {
                 Text("Limpar")
             }
-        }
-
-        Spacer(modifier = Modifier.size(12.dp))
-
-        Button(
-            onClick = {
-                activity.startActivity(
-                    Intent(activity, RegisterActivity::class.java)
-                )
-            }
-        ) {
-            Text("Registrar")
         }
     }
 }
