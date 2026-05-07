@@ -16,7 +16,8 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun ListPage(modifier: Modifier = Modifier.Companion) {
     Column(
-        modifier = modifier.fillMaxSize()
+        modifier = modifier
+            .fillMaxSize()
             .background(Color.Companion.Magenta)
             .wrapContentSize(Alignment.Companion.Center)
     ) {

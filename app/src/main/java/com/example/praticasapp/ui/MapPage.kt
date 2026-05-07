@@ -16,7 +16,8 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun MapPage(modifier: Modifier = Modifier.Companion) {
     Column(
-        modifier = modifier.fillMaxSize()
+        modifier = modifier
+            .fillMaxSize()
             .background(Color.Companion.Gray)
             .wrapContentSize(Alignment.Companion.Center)
     ) {
