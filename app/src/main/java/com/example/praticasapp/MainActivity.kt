@@ -31,6 +31,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+
             val navController = rememberNavController()
             PraticasAPPTheme {
                 Scaffold(modifier = Modifier.fillMaxSize(),
