@@ -20,7 +20,6 @@ import androidx.compose.ui.unit.sp
 fun HomePage(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
-            .padding(24.dp)
             .fillMaxSize()
             .background(Color.Blue)
             .wrapContentSize(Alignment.Center)

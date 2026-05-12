@@ -12,11 +12,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PraticasAPP" >
         <activity
-            android:name=".ui.nav.BottomNavItem"
-            android:exported="false"
-            android:label="@string/title_activity_bottom_nav_item"
-            android:theme="@style/Theme.PraticasAPP" />
-        <activity
             android:name=".RegisterActivity"
             android:exported="false"
             android:label="@string/title_activity_register"
