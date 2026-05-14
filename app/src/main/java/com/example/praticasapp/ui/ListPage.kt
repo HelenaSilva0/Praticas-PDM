@@ -32,6 +32,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.praticasapp.MainViewModel
 import com.example.praticasapp.model.City
 
 private fun getCities() = List(20) { i ->
@@ -71,8 +72,10 @@ fun CityItem(
     }
 }
 @Composable
-fun ListPage(modifier: Modifier = Modifier.Companion) {
-    val cityList = remember { getCities().toMutableStateList() }
+fun ListPage(modifier: Modifier = Modifier,
+        viewModel: MainViewModel
+) {
+    val cityList = viewModel.cities
     val activity = LocalContext.current as Activity
     LazyColumn(
         modifier = modifier
@@ -85,11 +88,12 @@ fun ListPage(modifier: Modifier = Modifier.Companion) {
             CityItem(
                 city = city,
                 onClose = {
-                    Toast.makeText(
-                        activity,
-                        "Clicou no X de ${city.name}",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    viewModel.remove(city)
+                    //Toast.makeText(
+                    //    activity,
+                     //   "Clicou no X de ${city.name}",
+                    //    Toast.LENGTH_SHORT
+                   // ).show()
                 },
                 onClick = {
                     Toast.makeText(
