@@ -7,8 +7,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.example.praticasapp.ui.CityDialog
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,11 +26,15 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.praticasapp.ui.HomePage
 import com.example.praticasapp.ui.nav.BottomNavBar
 import com.example.praticasapp.ui.nav.BottomNavItem
 import com.example.praticasapp.ui.nav.MainNavHost
+import com.example.praticasapp.ui.nav.Route
+import androidx.navigation.NavDestination.Companion.hasRoute
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.praticasapp.ui.theme.PraticasAPPTheme
 @OptIn(ExperimentalMaterial3Api::class)
 
@@ -38,9 +44,18 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
 
+            val navController = rememberNavController()
+            val currentRoute = navController.currentBackStackEntryAsState()
+
+            val showButton = currentRoute.value?.destination
+            ?.hasRoute(Route.List::class) == true
+
+            val launcher = rememberLauncherForActivityResult(contract =
+                ActivityResultContracts.RequestPermission(), onResult = {} )
+
             val viewModel: MainViewModel by viewModels()
             var showDialog by remember { mutableStateOf(false) }
-            val navController = rememberNavController()
+
             PraticasAPPTheme {
                 if (showDialog) {
                     CityDialog(
@@ -82,21 +97,35 @@ class MainActivity : ComponentActivity() {
                     },
 
                     floatingActionButton = {
+                        if (showButton) {
+                            FloatingActionButton(onClick = { showDialog = true }) {
+                                Icon(Icons.Default.Add, contentDescription = "Adicionar")
+                            }
+                        }
+                    }
+
+               /*     floatingActionButton = {
                         FloatingActionButton(onClick = { showDialog = true }) {
                             Icon(
                                 imageVector = Icons.Default.Add,
                                 contentDescription = "Adicionar"
                             )
                         }
-                    }
+                    }*/
                 ) { innerPadding ->
+                    Box(modifier = Modifier.padding(innerPadding)) {
+                        launcher.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
+                        MainNavHost(navController = navController,
+                            viewModel = viewModel)
+                    }
+                }/* { innerPadding ->
                     Box(
                         modifier = Modifier.padding(innerPadding)
                     ) {
                         MainNavHost(navController = navController,
                             viewModel = viewModel)
                     }
-                }
+                }*/
             }
         }
     }
