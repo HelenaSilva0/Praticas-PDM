@@ -14,6 +14,8 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     id("org.jetbrains.kotlin.plugin.serialization")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+    //id("com.android.application")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -82,4 +84,5 @@ dependencies {
     implementation("com.google.android.gms:play-services-location:21.3.0")
     // Google maps for compose
     implementation("com.google.maps.android:maps-compose:8.3.0")
+    implementation(platform("com.google.firebase:firebase-bom:34.13.0"))
 }
