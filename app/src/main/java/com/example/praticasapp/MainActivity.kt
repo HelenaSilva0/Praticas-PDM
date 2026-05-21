@@ -36,6 +36,9 @@ import com.example.praticasapp.ui.nav.Route
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.praticasapp.ui.theme.PraticasAPPTheme
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
+
 @OptIn(ExperimentalMaterial3Api::class)
 
 class MainActivity : ComponentActivity() {
@@ -73,7 +76,8 @@ class MainActivity : ComponentActivity() {
                                 Text("Bem-vindo/a!")
                             },
                             actions = {
-                                IconButton(onClick = { finish() }) {
+                                IconButton(onClick = { Firebase.auth.signOut()
+                                    /*finish()*/ }) {
                                     Icon(
                                         imageVector = Icons.AutoMirrored.Filled.ExitToApp,
                                         contentDescription = "Sair"

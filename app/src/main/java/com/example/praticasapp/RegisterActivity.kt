@@ -31,6 +31,8 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.praticasapp.ui.theme.PraticasAPPTheme
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 
 class RegisterActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -116,7 +118,7 @@ fun RegisterPage(modifier: Modifier = Modifier) {
             modifier = fieldModifier,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            Button(
+            /*Button(
                 onClick = {
                     Toast.makeText(
                         context,
@@ -125,6 +127,38 @@ fun RegisterPage(modifier: Modifier = Modifier) {
                     ).show()
 
                     activity?.finish()
+                },
+                enabled = name.isNotEmpty() &&
+                        email.isNotEmpty() &&
+                        password.isNotEmpty() &&
+                        repeatPassword.isNotEmpty() &&
+                        password == repeatPassword
+            ) {
+                Text("Registrar")
+            }*/
+
+            Button(
+                onClick = {
+                    activity?.let {
+                        Firebase.auth.createUserWithEmailAndPassword(email, password)
+                            .addOnCompleteListener(it) { task ->
+                                if (task.isSuccessful) {
+                                    Toast.makeText(
+                                        it,
+                                        "Registro OK!",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+
+                                   // it.finish()
+                                } else {
+                                    Toast.makeText(
+                                        it,
+                                        "Registro FALHOU!",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                }
+                            }
+                    }
                 },
                 enabled = name.isNotEmpty() &&
                         email.isNotEmpty() &&
