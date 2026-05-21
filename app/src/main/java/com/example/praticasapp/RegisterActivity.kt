@@ -149,7 +149,7 @@ fun RegisterPage(modifier: Modifier = Modifier) {
                                         Toast.LENGTH_LONG
                                     ).show()
 
-                                    it.finish()
+                                   // it.finish()
                                 } else {
                                     Toast.makeText(
                                         it,
