@@ -1,8 +1,10 @@
 package com.example.praticasapp
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import com.example.praticasapp.model.City
+import com.example.praticasapp.model.User
 import com.google.android.gms.maps.model.LatLng
 
 private fun getCities() = List(20) { i ->
@@ -10,6 +12,10 @@ private fun getCities() = List(20) { i ->
 }
 
 class MainViewModel : ViewModel() {
+
+    private val _user = mutableStateOf<User?> (null)
+    val user : User?
+        get() = _user.value
     private val _cities = getCities().toMutableStateList()
 
     val cities
