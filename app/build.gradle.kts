@@ -1,20 +1,8 @@
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-    }
-    dependencies {
-        classpath (
-            "com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:2.0.1")
-    }
-}
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     id("org.jetbrains.kotlin.plugin.serialization")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
-    //id("com.android.application")
     id("com.google.gms.google-services")
 }
 
@@ -86,4 +74,5 @@ dependencies {
     implementation("com.google.maps.android:maps-compose:8.3.0")
     implementation(platform("com.google.firebase:firebase-bom:34.13.0"))
     implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-firestore")
 }

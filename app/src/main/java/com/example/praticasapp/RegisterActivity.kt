@@ -30,6 +30,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.praticasapp.db.fb.FBDatabase
+import com.example.praticasapp.db.fb.toFBUser
+import com.example.praticasapp.model.User
 import com.example.praticasapp.ui.theme.PraticasAPPTheme
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
@@ -143,13 +146,14 @@ fun RegisterPage(modifier: Modifier = Modifier) {
                         Firebase.auth.createUserWithEmailAndPassword(email, password)
                             .addOnCompleteListener(it) { task ->
                                 if (task.isSuccessful) {
+                                    FBDatabase().register(User(name, email).toFBUser())
                                     Toast.makeText(
                                         it,
                                         "Registro OK!",
                                         Toast.LENGTH_LONG
                                     ).show()
 
-                                   // it.finish()
+                                    it.finish()
                                 } else {
                                     Toast.makeText(
                                         it,

@@ -28,6 +28,8 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.praticasapp.db.fb.FBDatabase
 import com.example.praticasapp.ui.HomePage
 import com.example.praticasapp.ui.nav.BottomNavBar
 import com.example.praticasapp.ui.nav.BottomNavItem
@@ -56,7 +58,10 @@ class MainActivity : ComponentActivity() {
             val launcher = rememberLauncherForActivityResult(contract =
                 ActivityResultContracts.RequestPermission(), onResult = {} )
 
-            val viewModel: MainViewModel by viewModels()
+            val fbDB = remember { FBDatabase() }
+            val viewModel : MainViewModel = viewModel(
+                factory = MainViewModelFactory(fbDB)
+            )
             var showDialog by remember { mutableStateOf(false) }
 
             PraticasAPPTheme {
@@ -73,7 +78,8 @@ class MainActivity : ComponentActivity() {
                     topBar = {
                         TopAppBar(
                             title = {
-                                Text("Bem-vindo/a!")
+                                val name = viewModel.user?.name?:"[carregando...]"
+                                Text("Bem-vindo/a! $name")
                             },
                             actions = {
                                 IconButton(onClick = { Firebase.auth.signOut()

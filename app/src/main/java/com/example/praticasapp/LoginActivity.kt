@@ -99,11 +99,12 @@ fun LoginPage(modifier: Modifier = Modifier) {
                     Firebase.auth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(activity) { task ->
                             if (task.isSuccessful) {
-                                /*activity.startActivity(
+                                activity.startActivity(
                                     Intent(activity, MainActivity::class.java).setFlags(
-                                        FLAG_ACTIVITY_SINGLE_TOP
+                                        Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                     )
-                                )*/
+                                )
+                                activity.finish()
 
                                 Toast.makeText(
                                     activity,
