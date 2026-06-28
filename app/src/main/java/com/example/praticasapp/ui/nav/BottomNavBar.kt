@@ -5,43 +5,27 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavDestination.Companion.hasRoute
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.praticasapp.MainViewModel
 
 @Composable
 fun BottomNavBar(
+    viewModel: MainViewModel,
     navController: NavHostController,
-    items: List<BottomNavItem>
+    items : List<BottomNavItem>
 ) {
-    NavigationBar {
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentDestination = navBackStackEntry?.destination
-
+    NavigationBar( contentColor = Color.Black ) {
         items.forEach { item ->
-            NavigationBarItem(
-                icon = {
-                    Icon(
-                        imageVector = item.icon,
-                        contentDescription = item.title
-                    )
-                },
-                label = {
-                    Text(text = item.title, fontSize = 12.sp)
-                },
+            NavigationBarItem (
+                icon = { Icon(imageVector = item.icon,
+                    contentDescription= item.title)},
+                label = { Text(text = item.title, fontSize = 12.sp) },
                 alwaysShowLabel = true,
-                selected = currentDestination?.hasRoute(item.route::class) == true,
+                selected = viewModel.page == item.route,
                 onClick = {
-                    navController.navigate(item.route) {
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
-                        }
-                        restoreState = true
-                        launchSingleTop = true
-                    }
+                    viewModel.page = item.route
                 }
             )
         }
