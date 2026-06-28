@@ -25,7 +25,7 @@ fun MainNavHost(
         }
 
         composable<Route.List> {
-            ListPage(modifier = modifier, viewModel = viewModel)
+            ListPage(modifier = modifier, viewModel = viewModel, navController = navController)
         }
 
         composable<Route.Map> {

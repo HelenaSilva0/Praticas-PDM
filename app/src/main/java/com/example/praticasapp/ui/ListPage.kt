@@ -1,7 +1,5 @@
 package com.example.praticasapp.ui
 
-import android.app.Activity
-import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,12 +19,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.praticasapp.MainViewModel
 import com.example.praticasapp.model.City
 import com.example.praticasapp.model.Weather
+import com.example.praticasapp.ui.nav.Route
 
 @Composable
 fun CityItem(
@@ -66,10 +65,10 @@ fun CityItem(
 
 @Composable
 fun ListPage(modifier: Modifier = Modifier,
-             viewModel: MainViewModel
+             viewModel: MainViewModel,
+             navController: NavController
 ) {
     val cityList = viewModel.cities
-    val activity = LocalContext.current as? Activity
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
@@ -83,13 +82,8 @@ fun ListPage(modifier: Modifier = Modifier,
                     viewModel.remove(city)
                 },
                 onClick = {
-                    activity?.let {
-                        Toast.makeText(
-                            it,
-                            "Clicou em ${city.name}",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
+                    viewModel.city = city.name
+                    navController.navigate(Route.Home)
                 }
             )
         }
