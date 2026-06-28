@@ -21,7 +21,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import com.example.praticasapp.MainViewModel
 import com.example.praticasapp.model.City
 import com.example.praticasapp.model.Weather
@@ -65,8 +64,7 @@ fun CityItem(
 
 @Composable
 fun ListPage(modifier: Modifier = Modifier,
-             viewModel: MainViewModel,
-             navController: NavController
+             viewModel: MainViewModel
 ) {
     val cityList = viewModel.cities
     LazyColumn(
@@ -83,7 +81,7 @@ fun ListPage(modifier: Modifier = Modifier,
                 },
                 onClick = {
                     viewModel.city = city.name
-                    navController.navigate(Route.Home)
+                    viewModel.page = Route.Home
                 }
             )
         }

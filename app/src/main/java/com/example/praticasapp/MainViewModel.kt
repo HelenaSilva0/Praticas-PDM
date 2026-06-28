@@ -15,6 +15,7 @@ import com.example.praticasapp.model.City
 import com.example.praticasapp.model.Forecast
 import com.example.praticasapp.model.User
 import com.example.praticasapp.model.Weather
+import com.example.praticasapp.ui.nav.Route
 import com.google.android.gms.maps.model.LatLng
 
 class MainViewModel(
@@ -36,6 +37,11 @@ class MainViewModel(
     var city: String?
         get() = _city.value
         set(tmp) { _city.value = tmp }
+
+    private var _page = mutableStateOf<Route>(Route.Home)
+    var page: Route
+        get() = _page.value
+        set(tmp) { _page.value = tmp }
 
     init {
         db.setListener(this)

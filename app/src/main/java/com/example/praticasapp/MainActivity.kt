@@ -1,10 +1,12 @@
 package com.example.praticasapp
 
 import android.os.Bundle
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import android.Manifest
 import com.example.praticasapp.ui.CityDialog
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -103,6 +105,7 @@ class MainActivity : ComponentActivity() {
                         )
 
                         BottomNavBar(
+                            viewModel = viewModel,
                             navController = navController,
                             items = items
                         )
@@ -125,10 +128,22 @@ class MainActivity : ComponentActivity() {
                         }
                     }*/
                 ) { innerPadding ->
+                    launcher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
                     Box(modifier = Modifier.padding(innerPadding)) {
-                        launcher.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
                         MainNavHost(navController = navController,
                             viewModel = viewModel)
+                    }
+                    LaunchedEffect(viewModel.page) {
+                        navController.navigate(viewModel.page) {
+                            // Volta pilha de navegação até HomePage (startDest).
+                            navController.graph.startDestinationRoute?.let {
+                                popUpTo(it) {
+                                    saveState = true
+                                }
+                                restoreState = true
+                            }
+                            launchSingleTop = true
+                        }
                     }
                 }/* { innerPadding ->
                     Box(
