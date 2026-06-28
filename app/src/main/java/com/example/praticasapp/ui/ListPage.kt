@@ -2,17 +2,14 @@ package com.example.praticasapp.ui
 
 import android.app.Activity
 import android.widget.Toast
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.FlexDirection.Companion.Row
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -22,29 +19,24 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.praticasapp.MainViewModel
 import com.example.praticasapp.model.City
+import com.example.praticasapp.model.Weather
 
-private fun getCities() = List(20) { i ->
-    City(name = "Cidade $i", weather = "Carregando clima...")
-}
 @Composable
 fun CityItem(
     city: City,
+    weather: Weather,
     onClick: () -> Unit,
     onClose: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val desc = if (weather == Weather.LOADING) "Carregando clima..." else weather.desc
     Row(
         modifier.fillMaxWidth().padding(8.dp).clickable { onClick() },
         verticalAlignment = Alignment.CenterVertically
@@ -62,7 +54,7 @@ fun CityItem(
             )
             Text(
                 modifier = Modifier,
-                text = city.weather ?: "Carregando clima...",
+                text = desc,
                 fontSize = 16.sp
             )
         }
@@ -71,46 +63,35 @@ fun CityItem(
         }
     }
 }
+
 @Composable
 fun ListPage(modifier: Modifier = Modifier,
-        viewModel: MainViewModel
+             viewModel: MainViewModel
 ) {
     val cityList = viewModel.cities
-    val activity = LocalContext.current as Activity
+    val activity = LocalContext.current as? Activity
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
             .padding(8.dp)
-            //.background(Color.Companion.Magenta)
-           // .wrapContentSize(Alignment.Companion.Center)
     ) {
-        items(cityList, key = { it.name }) { city ->
+        items(items = cityList, key = { it.name }) { city ->
             CityItem(
                 city = city,
+                weather = viewModel.weather(city.name),
                 onClose = {
                     viewModel.remove(city)
-                    //Toast.makeText(
-                    //    activity,
-                     //   "Clicou no X de ${city.name}",
-                    //    Toast.LENGTH_SHORT
-                   // ).show()
                 },
                 onClick = {
-                    Toast.makeText(
-                        activity,
-                        "Clicou em ${city.name}",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    activity?.let {
+                        Toast.makeText(
+                            it,
+                            "Clicou em ${city.name}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
             )
         }
-       // Text(
-        //    text = "Favoritas",
-        //  fontWeight = FontWeight.Companion.Bold,
-        //   color = Color.Companion.White,
-        //   modifier = modifier.align(Alignment.Companion.CenterHorizontally),
-        //    textAlign = TextAlign.Companion.Center,
-        //    ontSize = 20.sp
-        //)
     }
 }
