@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.praticasapp.api.WeatherService
 import com.example.praticasapp.db.fb.FBDatabase
 import com.example.praticasapp.ui.HomePage
 import com.example.praticasapp.ui.nav.BottomNavBar
@@ -59,8 +60,9 @@ class MainActivity : ComponentActivity() {
                 ActivityResultContracts.RequestPermission(), onResult = {} )
 
             val fbDB = remember { FBDatabase() }
+            val weatherService = remember { WeatherService() }
             val viewModel : MainViewModel = viewModel(
-                factory = MainViewModelFactory(fbDB)
+                factory = MainViewModelFactory(fbDB, weatherService)
             )
             var showDialog by remember { mutableStateOf(false) }
 
@@ -69,7 +71,7 @@ class MainActivity : ComponentActivity() {
                     CityDialog(
                         onDismiss = { showDialog = false },
                         onConfirm = { city ->
-                            if (city.isNotBlank()) viewModel.add(city)
+                            if (city.isNotBlank()) viewModel.addCity(city)
                             showDialog = false
                         }
                     )
